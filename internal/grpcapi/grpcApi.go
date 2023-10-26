@@ -109,7 +109,7 @@ func (api *oliveTinAPI) WatchExecution(req *pb.WatchExecutionRequest, srv pb.Oli
 func (api *oliveTinAPI) GetDashboardComponents(ctx ctx.Context, req *pb.GetDashboardComponentsRequest) (*pb.GetDashboardComponentsResponse, error) {
 	user := acl.UserFromContext(ctx, cfg)
 
-	res := actionsCfgToPb(cfg.Actions, user)
+	res := buildDashboardFromCfgToPb(cfg.Actions, cfg.Entities, user)
 
 	if len(res.Actions) == 0 {
 		log.Warn("Zero actions found - check that you have some actions defined, with a view permission")

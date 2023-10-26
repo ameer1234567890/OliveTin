@@ -8,7 +8,7 @@ import (
 	config "github.com/OliveTin/OliveTin/internal/config"
 )
 
-func actionsCfgToPb(cfgActions []config.Action, user *acl.AuthenticatedUser) *pb.GetDashboardComponentsResponse {
+func buildDashboardFromCfgToPb(cfgActions []config.Action, cfgEntities []config.Entity, user *acl.AuthenticatedUser) *pb.GetDashboardComponentsResponse {
 	res := &pb.GetDashboardComponentsResponse{}
 
 	for _, action := range cfgActions {
@@ -20,7 +20,20 @@ func actionsCfgToPb(cfgActions []config.Action, user *acl.AuthenticatedUser) *pb
 		res.Actions = append(res.Actions, btn)
 	}
 
+	for _, entity := range cfgEntities {
+		entityPb := entityCfgToPb(entity)
+		res.Entities = append(res.Entities, entityPb)
+	}
+
 	return res
+}
+
+func entityCfgToPb(entity config.Entity) *pb.Entity {
+	ent := &pb.Entity{
+		Title: entity.Title,
+	}
+
+	return ent
 }
 
 func actionCfgToPb(action config.Action, user *acl.AuthenticatedUser) *pb.Action {
